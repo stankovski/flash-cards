@@ -26,14 +26,8 @@ namespace FlashCards.Core
             {
                 Id = Guid.NewGuid()
             };
-            card.Sides.Add(new CardSide
-            {
-                Text = "What is A?"
-            });
-            card.Sides.Add(new CardSide
-            {
-                Text = "A is a letter"
-            });
+            card.SideA = new CardSide { Text = "What is A?" };
+            card.SideB = new CardSide { Text = "A is a letter" };
             collection.Cards.Add(card);
             return collection;
         }

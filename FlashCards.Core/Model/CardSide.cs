@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlashCards.Core.Model
 {
-    public class CardSide
+    public struct CardSide
     {
         public string Text { get; set; }
         public byte[] Data { get; set; }

@@ -8,13 +8,10 @@ namespace FlashCards.Core.Model
 {
     public class Card
     {
-        public Card()
-        {
-            Sides = new List<CardSide>();
-        }
-
         public Guid Id { get; set; }
 
-        public List<CardSide> Sides { get; private set; }
+        public CardSide SideA { get; set; }
+
+        public CardSide SideB { get; set; }
     }
 }

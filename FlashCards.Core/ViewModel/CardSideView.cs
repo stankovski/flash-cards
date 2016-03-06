@@ -11,7 +11,7 @@ namespace FlashCards.Core.ViewModel
 {
     public class CardSideView : INotifyPropertyChanged
     {
-        public string text { get; set; }
+        private string text;
         public string Text
         {
             get { return text; }

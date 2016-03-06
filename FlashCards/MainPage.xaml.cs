@@ -54,5 +54,14 @@ namespace FlashCards
         {
 
         }
+
+        private async void PivotItemLoading(Pivot sender, PivotItemEventArgs args)
+        {
+            var collectionView = args.Item.DataContext as CollectionView;
+            if (collectionView != null)
+            {
+                await collectionView.Load(App.DataStore);
+            }
+        }
     }
 }

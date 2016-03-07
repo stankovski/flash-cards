@@ -7,6 +7,6 @@ namespace FlashCards.Core
     {
         CardCollection GetCollection(string name);
         IEnumerable<string> GetCollections();
-        void SaveCollection(string name, CardCollection collection);
+        void SaveCollection(CardCollection collection);
     }
 }

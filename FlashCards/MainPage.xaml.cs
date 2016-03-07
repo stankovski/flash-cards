@@ -4,7 +4,10 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using FlashCards.Core;
+using FlashCards.Core.Model;
 using FlashCards.Core.ViewModel;
+using FlashCards.NavigationModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -52,7 +55,7 @@ namespace FlashCards
 
         private void HamburgerButtonClick(object sender, RoutedEventArgs e)
         {
-
+            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
 
         private async void PivotItemLoading(Pivot sender, PivotItemEventArgs args)
@@ -61,6 +64,37 @@ namespace FlashCards
             if (collectionView != null)
             {
                 await collectionView.Load(App.DataStore);
+            }
+        }
+
+        private void AddCardClick(object sender, RoutedEventArgs e)
+        {
+            var parameter = new CardNavigationModel
+            {
+                 CardCollection = (CollectionPivot.SelectedItem as CollectionView).CardCollection
+            };
+            Navigation.Service.Navigate<CardEditPage>(parameter);
+        }
+
+        private void SelectCardClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+        
+        private void CardClicked(object sender, TappedRoutedEventArgs e)
+        {
+            e.Handled = true;
+            var cardView = (e.OriginalSource as FrameworkElement).DataContext as CardView;
+            var cardCollection = (CollectionPivot.SelectedItem as CollectionView).CardCollection;
+
+            if (cardView != null && cardCollection != null)
+            {
+                var parameter = new CardNavigationModel
+                {
+                    Card = cardCollection.Cards.FirstOrDefault(c => c.Id == cardView.Id),
+                    CardCollection = (CollectionPivot.SelectedItem as CollectionView).CardCollection
+                };
+                Navigation.Service.Navigate<CardEditPage>(parameter);
             }
         }
     }

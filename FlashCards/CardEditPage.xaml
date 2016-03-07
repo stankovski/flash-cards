@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="FlashCards.MainPage"
+    x:Class="FlashCards.CardEditPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:FlashCards"
@@ -52,39 +52,22 @@
                     </Grid.RowDefinitions>
                     <Grid x:Name="Filler" Height="48" Background="Transparent" VerticalAlignment="Top"
                             Grid.Row="0"/>
-                    <Pivot Grid.Row="1" x:Name="CollectionPivot" ItemsSource="{x:Bind ViewModel.Collections}" PivotItemLoaded="PivotItemLoading">
-                        <Pivot.HeaderTemplate>
-                            <DataTemplate x:DataType="vm:CollectionView">
-                                <TextBlock Text="{x:Bind Name}"/>
-                            </DataTemplate>
-                        </Pivot.HeaderTemplate>
-                        <Pivot.ItemTemplate>
-                            <DataTemplate x:DataType="vm:CollectionView">
-                                <GridView x:Name="CardsGridView" ItemsSource="{x:Bind Cards}" SelectionMode="None" Tapped="CardClicked">
-                                    <GridView.ItemTemplate>
-                                        <DataTemplate x:DataType="vm:CardView">
-                                            <Grid>
-                                                <Image Source="Assets/dropshadow.png" Width="310" Height="210" Stretch="Fill" VerticalAlignment="Top"/>
-                                                <Grid VerticalAlignment="Top" Width="300" HorizontalAlignment="Left" 
-                                                      Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew, ConverterParameter=Inverse}">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <ui:CardSideView Grid.Column="0" Text="{x:Bind SideA.Text}"/>
-                                                    <ui:CardSideView Grid.Column="1" Text="{x:Bind SideB.Text}"/>
-                                                </Grid>
-                                                <Grid VerticalAlignment="Top" Width="300" Height="200" HorizontalAlignment="Left" Background="#FFA2CFE0"
-                                                      Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew}">
-                                                    <SymbolIcon Symbol="Add" Foreground="White" Width="20" Height="20"/>
-                                                </Grid>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </GridView.ItemTemplate>
-                                </GridView>
-                            </DataTemplate>
-                        </Pivot.ItemTemplate>
-                    </Pivot>
+                    <StackPanel Grid.Row="1" Orientation="Vertical" Padding="10">
+                        <TextBlock Text="Side A" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                        <TextBox x:Name="SideAText" Header="Text" Margin="8 10 8 0" Text="{x:Bind ViewModel.SideA.Text, Mode=OneWay}"/>
+                        <TextBlock Text="Drawing" Margin="8 10 8 0"/>
+                        <Button x:Name="SideAImageButton" Margin="8 10 8 0" Content="Add drawing" Click="SideAImageTapped"/>
+                        <Image x:Name="SideAImage" Height="100" Width="100" Margin="8 10 8 0" 
+                               Tapped="SideAImageTapped" Stretch="Uniform"
+                               Visibility="{x:Bind Path=SideAImageButton.Visibility, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}"/>
+                        <TextBlock Text="Side B" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 16 0 0"/>
+                        <TextBox x:Name="SideBText" Header="Text" Margin="8 10 8 0" Text="{x:Bind ViewModel.SideB.Text, Mode=OneWay}"/>
+                        <TextBlock Text="Drawing" Margin="8 10 8 0"/>
+                        <Button x:Name="SideBImageButton" Margin="8 10 8 0" Content="Add drawing" Click="SideBImageTapped"/>
+                        <Image x:Name="SideBImage" Height="100" Width="100" Margin="8 10 8 0" 
+                               Tapped="SideBImageTapped" Stretch="Uniform"
+                               Visibility="{x:Bind Path=SideBImageButton.Visibility, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}"/>
+                    </StackPanel>
                     <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" 
                         VerticalAlignment="Top" Click="HamburgerButtonClick"/>
                 </Grid>
@@ -94,8 +77,8 @@
     </Grid>
     <Page.BottomAppBar>
         <CommandBar IsOpen="False" ClosedDisplayMode="Minimal">
-            <AppBarButton Icon="Add" Click="AddCardClick" x:Name="AddCardButton" Label="Add Card"/>
-            <AppBarButton Icon="List" Click="SelectCardClick" x:Name="SelectCardsButton" Label="Add Card"/>
+            <AppBarButton Icon="Cancel" Click="CancelCardClick" x:Name="CancelButton" Label="Cancel Change"/>
+            <AppBarButton Icon="Delete" Click="DeleteCardClick" x:Name="DeleteButton" Label="Delete Card"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

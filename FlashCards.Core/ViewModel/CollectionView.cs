@@ -5,6 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlashCards.Core.Model;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace FlashCards.Core.ViewModel
 {
@@ -16,6 +19,8 @@ namespace FlashCards.Core.ViewModel
         }
 
         public ObservableCollection<CardView> Cards { get; private set; }
+
+        public CardCollection CardCollection { get; private set; }
 
         private string name;
         public string Name
@@ -88,6 +93,7 @@ namespace FlashCards.Core.ViewModel
             this.Name = collection.Name;
             this.Description = collection.Description;
             this.Format = collection.Format.ToString();
+            this.CardCollection = collection;
             this.Cards.Clear();
 
             foreach (var card in collection.Cards)
@@ -96,6 +102,10 @@ namespace FlashCards.Core.ViewModel
                 this.Cards.Add(cardView);
                 await cardView.Load(card);
             }
+            this.Cards.Add(new CardView
+            {
+                IsNew = true
+            });
         }
     }
 }

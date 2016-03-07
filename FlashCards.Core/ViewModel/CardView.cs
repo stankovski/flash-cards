@@ -22,6 +22,21 @@ namespace FlashCards.Core.ViewModel
 
         public Guid Id { get; private set; }
 
+        private bool isNew;
+        public bool IsNew
+        {
+            get { return isNew; }
+            set
+            {
+                if (value == isNew)
+                    return;
+
+                isNew = value;
+
+                OnPropertyChanged(nameof(IsNew));
+            }
+        }
+
         private CardSideView sideA;
         public CardSideView SideA
         {
@@ -69,7 +84,21 @@ namespace FlashCards.Core.ViewModel
             this.SideA.Image = await GetImage(card.SideA.Data);
             this.SideB.Text = card.SideB.Text;
             this.SideB.Image = await GetImage(card.SideB.Data);
+        }
 
+        public Card GetCard()
+        {
+            Card card = new Card();
+            card.Id = this.Id;
+            card.SideA = new CardSide
+            {
+                Text = this.SideA.Text
+            };
+            card.SideB = new CardSide
+            {
+                Text = this.SideB.Text
+            };
+            return card;
         }
 
         private static async Task<BitmapImage> GetImage(byte[] data)

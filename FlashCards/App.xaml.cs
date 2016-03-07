@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using FlashCards.Core;
+using FlashCards.Helpers;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -46,6 +47,8 @@ namespace FlashCards
             }
         }
 
+        private RootFrameNavigationHelper rootFrameNavigationHelper;
+
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
@@ -69,6 +72,11 @@ namespace FlashCards
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
+
+                Navigation.Service = new NavigationService(rootFrame);
+
+                // Use the RootFrameNavigationHelper to respond to keyboard and mouse shortcuts.
+                this.rootFrameNavigationHelper = new RootFrameNavigationHelper(rootFrame);
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 

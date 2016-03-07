@@ -1,0 +1,50 @@
+﻿<ContentDialog
+    x:Class="FlashCards.DrawingDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlashCards"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Drawing"
+    PrimaryButtonText="Save"
+    SecondaryButtonText="Cancel"
+    Width="400"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+
+    <StackPanel>
+        <Border Background="White" Width="350" Height="300">
+            <InkCanvas x:Name="InkCanvasControl" />
+        </Border>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <ComboBox x:Name="penColor" SelectedIndex="0" Margin="5"
+                          SelectionChanged="ColorSelectionChanged">
+                    <x:String>Black</x:String>
+                    <x:String>Red</x:String>
+                    <x:String>Blue</x:String>
+                    <x:String>Green</x:String>
+                </ComboBox>
+                <Button Width="32" Height="32" Margin="5" Padding="0" Click="SizeSmallClick">
+                    <Button.Content>
+                        <Ellipse Width="5" Height="5" Fill="Black"/>
+                    </Button.Content>
+                </Button>
+                <Button Width="32" Height="32" Margin="5" Padding="0" Click="SizeMedClick">
+                    <Button.Content>
+                        <Ellipse Width="10" Height="10" Fill="Black"/>
+                    </Button.Content>
+                </Button>
+                <Button Width="32" Height="32" Margin="5" Padding="0" Click="SizeMaxClick">
+                    <Button.Content>
+                        <Ellipse Width="15" Height="15" Fill="Black"/>
+                    </Button.Content>
+                </Button>
+                <Button Width="32" Height="32" Margin="5" Padding="0" Click="UndoClick" 
+                        Content="&#xE10E;" FontFamily="Segoe MDL2 Assets"/>
+                <Button x:Name="clearAll" Content="Clear" Click="ClearAllClick" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</ContentDialog>

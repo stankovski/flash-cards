@@ -109,12 +109,17 @@
   <ItemGroup>
     <Compile Include="CardFormat.cs" />
     <Compile Include="DataStore.cs" />
+    <Compile Include="Helpers\INavigationService.cs" />
+    <Compile Include="Helpers\NavigationHelper.cs" />
+    <Compile Include="Helpers\NavigationService.cs" />
+    <Compile Include="Helpers\SuspensionManager.cs" />
     <Compile Include="IDataStore.cs" />
     <Compile Include="Model\CardSide.cs" />
     <Compile Include="Model\Card.cs" />
     <Compile Include="Model\CardCollection.cs" />
     <Compile Include="Model\HistoricalStatistics.cs" />
     <Compile Include="Model\ExcerciseStatistics.cs" />
+    <Compile Include="Navigation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\CardSideView.cs" />
     <Compile Include="ViewModel\CollectionView.cs" />

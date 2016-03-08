@@ -41,11 +41,11 @@ namespace FlashCards
             UpdatePen();
         }
 
-        public InMemoryRandomAccessStream Drawing
+        public List<InkStroke> Strokes
         {
             get
             {
-                return _randomAccessStream;
+                return _inkPresenter.StrokeContainer.GetStrokes().ToList();
             }
         }
 
@@ -54,12 +54,8 @@ namespace FlashCards
             _lastStrokes.Push(args.Strokes);
         }
 
-        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            _randomAccessStream = new InMemoryRandomAccessStream();
-            var strokesJson = JsonConvert.SerializeObject(_inkPresenter.StrokeContainer.GetStrokes().ToList());
-            await _inkPresenter.StrokeContainer.SaveAsync(_randomAccessStream);
-            _randomAccessStream.Seek(0);
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

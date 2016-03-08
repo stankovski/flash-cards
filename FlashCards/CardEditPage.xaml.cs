@@ -143,9 +143,11 @@ namespace FlashCards
                 if (result == ContentDialogResult.Primary)
                 {
                     this.SideAImageButton.Visibility = Visibility.Collapsed;
-                    BitmapImage image = new BitmapImage();
-                    image.SetSource(dialog.Drawing);
-                    SideAImage.Source = image;
+                    foreach (var s in dialog.Strokes)
+                    {
+                        SideAImage.InkPresenter.StrokeContainer.AddStroke(s.Clone());
+                    }
+                    SideAImage.InkPresenter.IsInputEnabled = false;
                 }
             }
         }
@@ -158,9 +160,11 @@ namespace FlashCards
                 if (result == ContentDialogResult.Primary)
                 {
                     this.SideBImageButton.Visibility = Visibility.Collapsed;
-                    BitmapImage image = new BitmapImage();
-                    image.SetSource(dialog.Drawing);
-                    SideBImage.Source = image;
+                    foreach (var s in dialog.Strokes)
+                    {
+                        SideBImage.InkPresenter.StrokeContainer.AddStroke(s.Clone());
+                    }
+                    SideBImage.InkPresenter.IsInputEnabled = false;
                 }
             }
         }

@@ -57,16 +57,22 @@
                         <TextBox x:Name="SideAText" Header="Text" Margin="8 10 8 0" Text="{x:Bind ViewModel.SideA.Text, Mode=OneWay}"/>
                         <TextBlock Text="Drawing" Margin="8 10 8 0"/>
                         <Button x:Name="SideAImageButton" Margin="8 10 8 0" Content="Add drawing" Click="SideAImageTapped"/>
-                        <Image x:Name="SideAImage" Height="100" Width="100" Margin="8 10 8 0" 
-                               Tapped="SideAImageTapped" Stretch="Uniform"
-                               Visibility="{x:Bind Path=SideAImageButton.Visibility, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}"/>
+                        <InkCanvas x:Name="SideAImage" Height="350" Width="300" Margin="8 10 8 0"
+                               Tapped="SideAImageTapped" Visibility="{x:Bind Path=SideAImageButton.Visibility, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}">
+                            <InkCanvas.RenderTransform>
+                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                            </InkCanvas.RenderTransform>
+                        </InkCanvas>
                         <TextBlock Text="Side B" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 16 0 0"/>
                         <TextBox x:Name="SideBText" Header="Text" Margin="8 10 8 0" Text="{x:Bind ViewModel.SideB.Text, Mode=OneWay}"/>
                         <TextBlock Text="Drawing" Margin="8 10 8 0"/>
                         <Button x:Name="SideBImageButton" Margin="8 10 8 0" Content="Add drawing" Click="SideBImageTapped"/>
-                        <Image x:Name="SideBImage" Height="100" Width="100" Margin="8 10 8 0" 
-                               Tapped="SideBImageTapped" Stretch="Uniform"
-                               Visibility="{x:Bind Path=SideBImageButton.Visibility, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}"/>
+                        <InkCanvas x:Name="SideBImage" Height="350" Width="300" Margin="8 10 8 0" 
+                               Tapped="SideBImageTapped" Visibility="{x:Bind Path=SideBImageButton.Visibility, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}">
+                            <InkCanvas.RenderTransform>
+                                <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                            </InkCanvas.RenderTransform>
+                        </InkCanvas>
                     </StackPanel>
                     <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" 
                         VerticalAlignment="Top" Click="HamburgerButtonClick"/>

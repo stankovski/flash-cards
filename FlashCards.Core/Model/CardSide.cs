@@ -9,6 +9,6 @@ namespace FlashCards.Core.Model
     public struct CardSide
     {
         public string Text { get; set; }
-        public byte[] Data { get; set; }
+        public List<StrokeData> InkStrokes { get; set; }
     }
 }

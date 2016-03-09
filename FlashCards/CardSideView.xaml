@@ -7,13 +7,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     x:Name="CardSideViewControl"
-    d:DesignHeight="300"
+    d:DesignHeight="350"
     d:DesignWidth="400">
 
-    <Grid Width="150" Height="200">
-        <!--<Image Grid.RowSpan="2" Stretch="Fill" Source="Assets/paper.jpg" VerticalAlignment="Center" HorizontalAlignment="Center"/>-->
+    <Grid Width="350" Height="400">
         <Grid x:Name="TextOnlyCard" Background="White">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" TextWrapping="WrapWholeWords" Margin="10"
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" TextWrapping="WrapWholeWords" Margin="10"
+                        Text="{Binding ElementName=CardSideViewControl, Path=Text}"/>
+        </Grid>
+        <Grid x:Name="TextWithImageCard" Background="White" Visibility="{x:Bind Path=TextOnlyCard.Visibility, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}">
+            <InkCanvas x:Name="DrawingCanvas" Width="350" Height="400" VerticalAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="40" TextWrapping="WrapWholeWords" Margin="10 0 10 30"
                         Text="{Binding ElementName=CardSideViewControl, Path=Text}"/>
         </Grid>
     </Grid>

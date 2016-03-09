@@ -6,7 +6,9 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using FlashCards.Core.Model;
+using Newtonsoft.Json;
 using Windows.Storage.Streams;
+using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -77,13 +79,19 @@ namespace FlashCards.Core.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public async Task Load(Card card)
+        public void Load(Card card)
         {
             this.Id = card.Id;
             this.SideA.Text = card.SideA.Text;
-            this.SideA.Image = await GetImage(card.SideA.Data);
+            if (card.SideA.InkStrokes != null)
+            {
+                this.SideA.Strokes = card.SideA.InkStrokes.Select(s => s.ToInkStroke()).ToList();
+            }
             this.SideB.Text = card.SideB.Text;
-            this.SideB.Image = await GetImage(card.SideB.Data);
+            if (card.SideB.InkStrokes != null)
+            {
+                this.SideB.Strokes = card.SideB.InkStrokes.Select(s => s.ToInkStroke()).ToList();
+            }
         }
 
         public Card GetCard()
@@ -92,29 +100,15 @@ namespace FlashCards.Core.ViewModel
             card.Id = this.Id;
             card.SideA = new CardSide
             {
-                Text = this.SideA.Text
+                Text = this.SideA.Text,
+                InkStrokes = this.SideA.Strokes.Select(s => new StrokeData(s)).ToList()
             };
             card.SideB = new CardSide
             {
-                Text = this.SideB.Text
+                Text = this.SideB.Text,
+                InkStrokes = this.SideB.Strokes.Select(s => new StrokeData(s)).ToList()
             };
             return card;
-        }
-
-        private static async Task<BitmapImage> GetImage(byte[] data)
-        {
-            if (data == null || data.Length == 0)
-            {
-                return null;
-            }
-            BitmapImage image = new BitmapImage();
-            using (InMemoryRandomAccessStream randomAccessStream = new InMemoryRandomAccessStream())
-            {
-                await randomAccessStream.WriteAsync(data.AsBuffer());
-                randomAccessStream.Seek(0);
-                image.SetSource(randomAccessStream);
-            }
-            return image;
         }
     }
 }

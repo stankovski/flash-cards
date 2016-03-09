@@ -77,7 +77,7 @@ namespace FlashCards.Core.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public async Task Load(IDataStore dataStore)
+        public void Load(IDataStore dataStore)
         {
             if (dataStore == null)
             {
@@ -100,7 +100,7 @@ namespace FlashCards.Core.ViewModel
             {
                 var cardView = new CardView();
                 this.Cards.Add(cardView);
-                await cardView.Load(card);
+                cardView.Load(card);
             }
             this.Cards.Add(new CardView
             {

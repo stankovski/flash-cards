@@ -11,6 +11,7 @@ using FlashCards.Core.ViewModel;
 using FlashCards.NavigationModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Input.Inking;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -43,7 +44,7 @@ namespace FlashCards
             this.InitializeComponent();
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             if (e.Parameter != null)
@@ -56,7 +57,17 @@ namespace FlashCards
 
                 if (parameter.Card != null)
                 {
-                    await ViewModel.Load(parameter.Card);
+                    ViewModel.Load(parameter.Card);
+                    if (ViewModel.SideA.Strokes.Count > 0)
+                    {
+                        UpdateDrawing(SideAImage, ViewModel.SideA.Strokes);
+                        SideAImageButton.Visibility = Visibility.Collapsed;
+                    }
+                    if (ViewModel.SideB.Strokes.Count > 0)
+                    {
+                        UpdateDrawing(SideBImage, ViewModel.SideB.Strokes);
+                        SideBImageButton.Visibility = Visibility.Collapsed;
+                    }
                 }
                 _cardCollection = parameter.CardCollection;
             }
@@ -76,6 +87,8 @@ namespace FlashCards
                 // Update ViewModel
                 ViewModel.SideA.Text = this.SideAText.Text;
                 ViewModel.SideB.Text = this.SideBText.Text;
+                ViewModel.SideA.Strokes = this.SideAImage.InkPresenter.StrokeContainer.GetStrokes().Select(s => s.Clone()).ToList();
+                ViewModel.SideB.Strokes = this.SideBImage.InkPresenter.StrokeContainer.GetStrokes().Select(s => s.Clone()).ToList();
 
                 var card = ViewModel.GetCard();
                 var existingCard = _cardCollection.Cards.FirstOrDefault(c => c.Id == card.Id);
@@ -137,36 +150,47 @@ namespace FlashCards
 
         private async void SideAImageTapped(object sender, RoutedEventArgs e)
         {
-            using (var dialog = new DrawingDialog())
+            if (await GetDrawing(SideAImage))
             {
-                var result = await dialog.ShowAsync();
-                if (result == ContentDialogResult.Primary)
-                {
-                    this.SideAImageButton.Visibility = Visibility.Collapsed;
-                    foreach (var s in dialog.Strokes)
-                    {
-                        SideAImage.InkPresenter.StrokeContainer.AddStroke(s.Clone());
-                    }
-                    SideAImage.InkPresenter.IsInputEnabled = false;
-                }
+                this.SideAImageButton.Visibility = Visibility.Collapsed;
             }
         }
 
+
         private async void SideBImageTapped(object sender, RoutedEventArgs e)
+        {
+            if (await GetDrawing(SideBImage))
+            {
+                this.SideBImageButton.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private async Task<bool> GetDrawing(InkCanvas canvas)
         {
             using (var dialog = new DrawingDialog())
             {
+                if (canvas.InkPresenter.StrokeContainer.BoundingRect.Width > 0)
+                {
+                    dialog.Strokes.AddRange(
+                        canvas.InkPresenter.StrokeContainer.GetStrokes().Select(s => s.Clone()));
+                }
                 var result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
                 {
-                    this.SideBImageButton.Visibility = Visibility.Collapsed;
-                    foreach (var s in dialog.Strokes)
-                    {
-                        SideBImage.InkPresenter.StrokeContainer.AddStroke(s.Clone());
-                    }
-                    SideBImage.InkPresenter.IsInputEnabled = false;
+                    UpdateDrawing(canvas, dialog.Strokes);
+                    return true;
                 }
+                return false;
             }
+        }
+
+        private static void UpdateDrawing(InkCanvas canvas, List<InkStroke> strokes)
+        {
+            canvas.InkPresenter.StrokeContainer.Clear();
+            canvas.InkPresenter.StrokeContainer.AddStrokes(strokes);
+            canvas.Width = canvas.InkPresenter.StrokeContainer.BoundingRect.Right;
+            canvas.Height = canvas.InkPresenter.StrokeContainer.BoundingRect.Bottom;
+            canvas.InkPresenter.IsInputEnabled = false;
         }
     }
 }

@@ -26,36 +26,37 @@ namespace FlashCards
     {
         private InkPresenter _inkPresenter;
         private double _penSize = 2;
-        private Stack<IReadOnlyList<InkStroke>> _lastStrokes = new Stack<IReadOnlyList<InkStroke>>();
         private InMemoryRandomAccessStream _randomAccessStream = null;
 
         public DrawingDialog()
         {
+            Strokes = new List<InkStroke>();
             this.InitializeComponent();
 
             _inkPresenter = InkCanvasControl.InkPresenter;
             _inkPresenter.InputDeviceTypes =
                 CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen | CoreInputDeviceTypes.Touch;
-            _inkPresenter.StrokesCollected += _inkPresenter_StrokesCollected;
 
             UpdatePen();
         }
 
-        public List<InkStroke> Strokes
-        {
-            get
-            {
-                return _inkPresenter.StrokeContainer.GetStrokes().ToList();
-            }
-        }
+        public List<InkStroke> Strokes { get; private set; }
 
-        private void _inkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs args)
+        private void DialogOpened(ContentDialog sender, ContentDialogOpenedEventArgs args)
         {
-            _lastStrokes.Push(args.Strokes);
+            if (Strokes.Count > 0)
+            {
+                _inkPresenter.StrokeContainer.AddStrokes(Strokes);
+            }
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            Strokes.Clear();
+            foreach (var stroke in _inkPresenter.StrokeContainer.GetStrokes())
+            {
+                Strokes.Add(stroke.Clone());
+            }
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -87,17 +88,12 @@ namespace FlashCards
 
         private void UndoClick(object sender, RoutedEventArgs e)
         {
-            if (_lastStrokes != null)
+            var lastStroke = _inkPresenter.StrokeContainer.GetStrokes().LastOrDefault();
+            if (lastStroke != null)
             {
-                if (_lastStrokes.Count > 0)
-                {
-                    foreach (var stroke in _lastStrokes.Pop())
-                    {
-                        stroke.Selected = true;
-                    }
-                }
+                lastStroke.Selected = true;
+                _inkPresenter.StrokeContainer.DeleteSelected();
             }
-            _inkPresenter.StrokeContainer.DeleteSelected();
         }
 
         private void ClearAllClick(object sender, RoutedEventArgs e)
@@ -138,13 +134,12 @@ namespace FlashCards
 
         public async void Dispose()
         {
-            _inkPresenter.StrokesCollected -= _inkPresenter_StrokesCollected;
             if (_randomAccessStream != null)
             {
                 await _randomAccessStream.FlushAsync();
                 _randomAccessStream.Dispose();
                 _randomAccessStream = null;
             }
-        }
+        }        
     }
 }

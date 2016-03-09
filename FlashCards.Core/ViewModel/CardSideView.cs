@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -11,6 +12,11 @@ namespace FlashCards.Core.ViewModel
 {
     public class CardSideView : INotifyPropertyChanged
     {
+        public CardSideView()
+        {
+            Strokes = new List<InkStroke>();
+        }
+
         private string text;
         public string Text
         {
@@ -26,18 +32,18 @@ namespace FlashCards.Core.ViewModel
             }
         }
 
-        private BitmapImage image;
-        public BitmapImage Image
+        private List<InkStroke> strokes;
+        public List<InkStroke> Strokes
         {
-            get { return image; }
+            get { return strokes; }
             set
             {
-                if (value == image)
+                if (value == strokes)
                     return;
 
-                image = value;
+                strokes = value;
 
-                OnPropertyChanged(nameof(Image));
+                OnPropertyChanged(nameof(Strokes));
             }
         }
 

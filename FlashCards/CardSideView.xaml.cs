@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using FlashCards.Core;
+using FlashCards.Core.Model;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Input.Inking;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -35,20 +37,33 @@ namespace FlashCards
             typeof(string), typeof(CardSideView), new PropertyMetadata(null));
 
 
-        public BitmapImage Image
+        public List<InkStroke> Strokes
         {
-            get { return (BitmapImage)GetValue(ImageProperty); }
-            set { SetValue(ImageProperty, value); }
+            get { return (List<InkStroke>)GetValue(StrokesProperty); }
+            set { SetValue(StrokesProperty, value); }
         }
-        public static readonly DependencyProperty ImageProperty = DependencyProperty.Register(nameof(Image),
-            typeof(BitmapImage), typeof(CardSideView), new PropertyMetadata(null));
+        public static readonly DependencyProperty StrokesProperty = DependencyProperty.Register(nameof(Strokes),
+            typeof(List<InkStroke>), typeof(CardSideView), new PropertyMetadata(new List<InkStroke>(), ChangeInkStrokes));
 
-        public CardFormat Format
+        private static void ChangeInkStrokes(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
-            get { return (CardFormat)GetValue(CardFormatProperty); }
-            set { SetValue(CardFormatProperty, value); }
+            var thisControl = source as CardSideView;
+            if (thisControl != null)
+            {
+                var strokes = e.NewValue as List<InkStroke>;
+                if (strokes != null && strokes.Count > 0)
+                {
+                    thisControl.DrawingCanvas.InkPresenter.StrokeContainer.Clear();
+                    thisControl.DrawingCanvas.InkPresenter.StrokeContainer.AddStrokes(e.NewValue as List<InkStroke>);
+                    thisControl.DrawingCanvas.InkPresenter.IsInputEnabled = false;
+                    thisControl.TextOnlyCard.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    thisControl.TextOnlyCard.Visibility = Visibility.Visible;
+                }
+            }
         }
-        public static readonly DependencyProperty CardFormatProperty = DependencyProperty.Register(nameof(Format),
-            typeof(CardFormat), typeof(CardSideView), new PropertyMetadata(CardFormat.Text));
+
     }
 }

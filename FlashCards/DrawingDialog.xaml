@@ -10,6 +10,7 @@
     PrimaryButtonText="Save"
     SecondaryButtonText="Cancel"
     Width="400"
+    Opened="DialogOpened"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 

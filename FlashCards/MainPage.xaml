@@ -51,7 +51,8 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid x:Name="Filler" Height="48" Background="Transparent" VerticalAlignment="Top"
-                            Grid.Row="0"/>
+                            Grid.Row="0">
+                    </Grid>
                     <Pivot Grid.Row="1" x:Name="CollectionPivot" ItemsSource="{x:Bind ViewModel.Collections}" PivotItemLoaded="PivotItemLoading">
                         <Pivot.HeaderTemplate>
                             <DataTemplate x:DataType="vm:CollectionView">
@@ -64,17 +65,17 @@
                                     <GridView.ItemTemplate>
                                         <DataTemplate x:DataType="vm:CardView">
                                             <Grid>
-                                                <Image Source="Assets/dropshadow.png" Width="310" Height="210" Stretch="Fill" VerticalAlignment="Top"/>
-                                                <Grid VerticalAlignment="Top" Width="300" HorizontalAlignment="Left" 
-                                                      Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew, ConverterParameter=Inverse}">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <ui:CardSideView Grid.Column="0" Text="{x:Bind SideA.Text}"/>
-                                                    <ui:CardSideView Grid.Column="1" Text="{x:Bind SideB.Text}"/>
-                                                </Grid>
-                                                <Grid VerticalAlignment="Top" Width="300" Height="200" HorizontalAlignment="Left" Background="#FFA2CFE0"
+                                                <Image Source="Assets/dropshadow.png" Width="360" Height="210" Stretch="Fill" VerticalAlignment="Top"/>
+                                                <Viewbox Width="350" Height="200" Stretch="Fill" StretchDirection="Both" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                                         Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew, ConverterParameter=Inverse}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <ui:CardSideView Grid.Column="0" Text="{x:Bind SideA.Text, Mode=OneWay}"
+                                                            Strokes="{x:Bind SideA.Strokes, Mode=OneWay}"/>
+                                                        <ui:CardSideView Grid.Column="0" Text="{x:Bind SideB.Text, Mode=OneWay}"
+                                                            Strokes="{x:Bind SideB.Strokes, Mode=OneWay}"/>
+                                                    </StackPanel>
+                                                </Viewbox>
+                                                <Grid VerticalAlignment="Top" Width="350" Height="200" HorizontalAlignment="Left" Background="#FFA2CFE0"
                                                       Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew}">
                                                     <SymbolIcon Symbol="Add" Foreground="White" Width="20" Height="20"/>
                                                 </Grid>

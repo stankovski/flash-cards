@@ -124,6 +124,7 @@
     <Compile Include="Navigation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\CardSideView.cs" />
+    <Compile Include="ViewModel\MemorizationView.cs" />
     <Compile Include="ViewModel\CollectionView.cs" />
     <Compile Include="ViewModel\MainView.cs" />
     <Compile Include="ViewModel\CardView.cs" />

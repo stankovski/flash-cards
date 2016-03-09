@@ -53,10 +53,10 @@
                     <Grid x:Name="Filler" Height="48" Background="Transparent" VerticalAlignment="Top"
                             Grid.Row="0">
                     </Grid>
-                    <Pivot Grid.Row="1" x:Name="CollectionPivot" ItemsSource="{x:Bind ViewModel.Collections}" PivotItemLoaded="PivotItemLoading">
+                    <Pivot Grid.Row="1" x:Name="CollectionPivot" ItemsSource="{x:Bind ViewModel.Collections, Mode=OneWay}">
                         <Pivot.HeaderTemplate>
                             <DataTemplate x:DataType="vm:CollectionView">
-                                <TextBlock Text="{x:Bind Name}"/>
+                                <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
                             </DataTemplate>
                         </Pivot.HeaderTemplate>
                         <Pivot.ItemTemplate>
@@ -67,7 +67,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="50"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{x:Bind Description}"/>
+                                        <TextBlock Text="{x:Bind Description, Mode=OneWay}"/>
                                         <Button Grid.Column="1" Content="Edit" Click="{x:Bind Edit}"/>
                                     </Grid>
                                     <Grid Visibility="{x:Bind EditMode, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -85,13 +85,13 @@
                                         <Button Grid.Column="1" Grid.Row="1" Content="Save" Click="{x:Bind Save}" Margin="5 0 5 0"/>
                                         <Button Grid.Column="2" Grid.Row="1" Content="Cancel" Click="{x:Bind Cancel}" Margin="0 0 5 0"/>
                                     </Grid>
-                                    <GridView x:Name="CardsGridView" ItemsSource="{x:Bind Cards}" SelectionMode="None" Tapped="CardClicked">
+                                    <GridView x:Name="CardsGridView" ItemsSource="{x:Bind Cards, Mode=OneWay}" SelectionMode="None" Tapped="CardClicked">
                                         <GridView.ItemTemplate>
                                             <DataTemplate x:DataType="vm:CardView">
                                                 <Grid>
                                                     <Image Source="Assets/dropshadow.png" Width="360" Height="210" Stretch="Fill" VerticalAlignment="Top"/>
                                                     <Viewbox Width="350" Height="200" Stretch="Fill" StretchDirection="Both" VerticalAlignment="Top" HorizontalAlignment="Left"
-                                                         Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew, ConverterParameter=Inverse}">
+                                                         Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew, ConverterParameter=Inverse, Mode=OneWay}">
                                                         <StackPanel Orientation="Horizontal">
                                                             <ui:CardSideView Grid.Column="0" Text="{x:Bind SideA.Text, Mode=OneWay}"
                                                             Strokes="{x:Bind SideA.Strokes, Mode=OneWay}"/>
@@ -100,7 +100,7 @@
                                                         </StackPanel>
                                                     </Viewbox>
                                                     <Grid VerticalAlignment="Top" Width="350" Height="200" HorizontalAlignment="Left" Background="#FFA2CFE0"
-                                                      Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew}">
+                                                      Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew, Mode=OneWay}">
                                                         <SymbolIcon Symbol="Add" Foreground="White" Width="20" Height="20"/>
                                                     </Grid>
                                                 </Grid>
@@ -120,8 +120,8 @@
     </Grid>
     <Page.BottomAppBar>
         <CommandBar IsOpen="False" ClosedDisplayMode="Minimal">
-            <AppBarButton Icon="Add" Click="AddCardClick" x:Name="AddCardButton" Label="Add Card"/>
-            <AppBarButton Icon="List" Click="SelectCardClick" x:Name="SelectCardsButton" Label="Add Card"/>
+            <AppBarButton Icon="Delete" Click="DeleteCollection" x:Name="DeleteCollectionButton" Label="Delete Collection"/>
+            <AppBarButton Icon="Add" Click="AddCollection" x:Name="AddCollectionButton" Label="Add Collection"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

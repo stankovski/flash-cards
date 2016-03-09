@@ -11,23 +11,11 @@ using Windows.UI.Xaml.Controls;
 
 namespace FlashCards.Core.ViewModel
 {
-    public class CollectionView : INotifyPropertyChanged
+    public class MemorizationView : INotifyPropertyChanged
     {
-        private IDataStore _dataStore;
-
-        public CollectionView(IDataStore dataStore, CardCollection collection)
+        public MemorizationView()
         {
-            if (dataStore == null)
-            {
-                throw new ArgumentNullException(nameof(dataStore));
-            }
-
-            Cards = new ObservableCollection<CardView>();
-
-            _dataStore = dataStore;
-            this.Name = collection.Name;
-            this.Description = collection.Description;
-            this.CardCollection = collection;
+            Cards = new ObservableCollection<CardView>();            
         }
 
         private ObservableCollection<CardView> cards;
@@ -44,8 +32,6 @@ namespace FlashCards.Core.ViewModel
                 OnPropertyChanged(nameof(Cards));
             }
         }
-
-        public CardCollection CardCollection { get; private set; }
 
         private string name;
         public string Name
@@ -77,54 +63,16 @@ namespace FlashCards.Core.ViewModel
             }
         }
 
-        private bool editMode;
-        public bool EditMode
+        public void Load(CardCollection collection)
         {
-            get { return editMode; }
-            set
-            {
-                if (value == editMode)
-                    return;
-
-                editMode = value;
-
-                OnPropertyChanged(nameof(EditMode));
-            }
-        }
-
-        public void Edit()
-        {
-            EditMode = true;
-        }
-
-        public void Cancel()
-        {
-            EditMode = false;
-        }
-
-        public void Load()
-        {
-            foreach (var card in CardCollection.Cards)
+            this.Name = collection.Name;
+            this.Description = collection.Description;
+            foreach (var card in collection.Cards)
             {
                 var cardView = new CardView();
                 this.Cards.Add(cardView);
                 cardView.Load(card);
             }
-            
-            this.Cards.Add(new CardView
-            {
-                IsNew = true
-            });
-        }
-
-        public void Save()
-        {
-            EditMode = false;
-            CardCollection.Name = this.Name;
-            CardCollection.Description = this.Description;
-            CardCollection.Cards.Clear();
-            CardCollection.Cards.AddRange(this.Cards.Select(c => c.GetCard()));
-            _dataStore.SaveCollection(CardCollection);
         }
 
         public void OnPropertyChanged(string name)

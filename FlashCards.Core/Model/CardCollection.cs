@@ -20,5 +20,13 @@ namespace FlashCards.Core.Model
         public string Description { get; set; }
 
         public List<Card> Cards { get; private set; }
+
+        public string FileName
+        {
+            get
+            {
+                return $"{Id}.memcards";
+            }
+        }
     }
 }

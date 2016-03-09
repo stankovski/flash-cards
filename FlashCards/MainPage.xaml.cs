@@ -41,11 +41,34 @@ namespace FlashCards
         {
             base.OnNavigatedTo(e);
             ViewModel.Load();
+            BuildLocalizedMenu();
+        }
+
+        private void BuildLocalizedMenu()
+        {
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = "Start",
+                Symbol = Symbol.Play,
+                Action = () => 
+                {
+                    var cardCollection = (CollectionPivot.SelectedItem as CollectionView).CardCollection;
+
+                    if (cardCollection != null)
+                    {
+                        Navigation.Service.Navigate<MemorizationPage>(new MemorizationNavigationModel { CardCollection = cardCollection });
+                    }
+                }
+            });
         }
 
         private void NavLinkItemClick(object sender, ItemClickEventArgs e)
         {
-
+            var navLink = e.ClickedItem as NavigationLink;
+            if (navLink != null)
+            {
+                navLink.Action();
+            }
         }
 
         private void GoToSettings(object sender, TappedRoutedEventArgs e)
@@ -58,29 +81,6 @@ namespace FlashCards
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
 
-        private void PivotItemLoading(Pivot sender, PivotItemEventArgs args)
-        {
-            var collectionView = args.Item.DataContext as CollectionView;
-            if (collectionView != null)
-            {
-                collectionView.Load();
-            }
-        }
-
-        private void AddCardClick(object sender, RoutedEventArgs e)
-        {
-            var parameter = new CardNavigationModel
-            {
-                 CardCollection = (CollectionPivot.SelectedItem as CollectionView).CardCollection
-            };
-            Navigation.Service.Navigate<CardEditPage>(parameter);
-        }
-
-        private void SelectCardClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-        
         private void CardClicked(object sender, TappedRoutedEventArgs e)
         {
             e.Handled = true;
@@ -96,6 +96,35 @@ namespace FlashCards
                 };
                 Navigation.Service.Navigate<CardEditPage>(parameter);
             }
+        }
+
+        private async void DeleteCollection(object sender, RoutedEventArgs e)
+        {
+            var cardCollection = (CollectionPivot.SelectedItem as CollectionView).CardCollection;
+            if (cardCollection == null)
+            {
+                return;
+            }
+
+            if (await Utils.ShowQuestionMessageBox("Are you sure you want to delete the entire collection?", "Delete Collection"))
+            {
+                App.DataStore.RemoveCollection(cardCollection);
+                ViewModel.Load();
+                Bindings.Update();
+            }
+        }
+
+        private void AddCollection(object sender, RoutedEventArgs e)
+        {
+            var newCollection = new CardCollection
+            {
+                Id = Guid.NewGuid(),
+                Name = "new",
+                Description = "New collection"
+            };
+            App.DataStore.SaveCollection(newCollection);
+            ViewModel.Load();
+            Bindings.Update();
         }
     }
 }

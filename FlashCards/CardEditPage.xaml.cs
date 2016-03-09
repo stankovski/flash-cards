@@ -128,24 +128,13 @@ namespace FlashCards
 
         private async void DeleteCardClick(object sender, RoutedEventArgs e)
         {
-            if (await ShowQuestionMessageBox("Are you sure you want to delete the card?", "Delete Card"))
+            if (await Utils.ShowQuestionMessageBox("Are you sure you want to delete the card?", "Delete Card"))
             {
                 _cancelSave = true;
                 _cardCollection.Cards.RemoveAll(c => c.Id == ViewModel.Id);
                 App.DataStore.SaveCollection(_cardCollection);
                 Navigation.Service.GoBack();
             }
-        }
-
-        private async Task<bool> ShowQuestionMessageBox(string text, string title)
-        {
-            var dialog = new MessageDialog(text);
-            dialog.Commands.Add(new UICommand { Label = "OK", Id = 0 });
-            dialog.Commands.Add(new UICommand { Label = "Cancel", Id = 1 });
-            dialog.DefaultCommandIndex = 0;
-            dialog.CancelCommandIndex = 1;
-            IUICommand result = await dialog.ShowAsync();
-            return (int)result.Id == 0;
         }
 
         private async void SideAImageTapped(object sender, RoutedEventArgs e)

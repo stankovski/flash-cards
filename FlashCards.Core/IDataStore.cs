@@ -6,8 +6,8 @@ namespace FlashCards.Core
     public interface IDataStore
     {
         CardCollection GetCollection(string name);
-        CardCollection RenameCollection(CardCollection collection, string newName);
-        IEnumerable<string> GetCollections();
+        IEnumerable<CardCollection> GetCollections();
         void SaveCollection(CardCollection collection);
+        void RemoveCollection(CardCollection collection);
     }
 }

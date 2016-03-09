@@ -69,16 +69,21 @@ namespace FlashCards.Core.ViewModel
             }
         }
 
-        public void OnPropertyChanged(string name)
+        private bool flipped;
+        public bool Flipped
         {
-            if (PropertyChanged != null)
+            get { return flipped; }
+            set
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
+                if (value == flipped)
+                    return;
+
+                flipped = value;
+
+                OnPropertyChanged(nameof(Flipped));
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        
         public void Load(Card card)
         {
             this.Id = card.Id;
@@ -97,7 +102,15 @@ namespace FlashCards.Core.ViewModel
         public Card GetCard()
         {
             Card card = new Card();
-            card.Id = this.Id;
+            if (this.Id == default(Guid))
+            {
+                card.Id = Guid.NewGuid();
+            }
+            else
+            {
+                card.Id = this.Id;
+            }
+
             card.SideA = new CardSide
             {
                 Text = this.SideA.Text,
@@ -110,5 +123,20 @@ namespace FlashCards.Core.ViewModel
             };
             return card;
         }
+
+        public void Flip()
+        {
+            Flipped = !Flipped;
+        }
+
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

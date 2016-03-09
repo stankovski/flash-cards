@@ -6,78 +6,53 @@ using System.Text;
 using System.Threading.Tasks;
 using FlashCards.Core.Model;
 using Newtonsoft.Json;
+using Windows.Storage;
 
 namespace FlashCards.Core
 {
     public class DataStore : IDataStore
     {
-        Dictionary<string, string> _dataStore = new Dictionary<string, string>();
-
+        private string _baseFolder;
         public DataStore()
         {
-            var collection = new CardCollection
-            {
-                Name = "foo",
-                Description = "my description",
-            };
-            collection.Cards.Add(new Card
-            {
-                Id = Guid.NewGuid(),
-                SideA = new CardSide { Text = "What is A?" },
-                SideB = new CardSide { Text = "A is a letter" }
-            });
-            collection.Cards.Add(new Card
-            {
-                Id = Guid.NewGuid(),
-                SideA = new CardSide { Text = "What is B?" },
-                SideB = new CardSide { Text = "B is a letter" }
-            });
-            collection.Cards.Add(new Card
-            {
-                Id = Guid.NewGuid(),
-                SideA = new CardSide { Text = "What is *?" },
-                SideB = new CardSide { Text = "* is a symbol" }
-            });
-            _dataStore["foo.memcards"] = JsonConvert.SerializeObject(collection);
-
-            collection = new CardCollection
-            {
-                Name = "bar",
-                Description = "my description",
-            };
-            collection.Cards.Add(new Card
-            {
-                Id = Guid.NewGuid(),
-                SideA = new CardSide { Text = "What is x?" },
-                SideB = new CardSide { Text = "x is a letter" }
-            });
-            collection.Cards.Add(new Card
-            {
-                Id = Guid.NewGuid(),
-                SideA = new CardSide { Text = "What is *?" },
-                SideB = new CardSide { Text = "* is a symbol" }
-            });
-            _dataStore["bar.memcards"] = JsonConvert.SerializeObject(collection);
+            _baseFolder = ApplicationData.Current.LocalFolder.Path;
         }
 
-        public IEnumerable<string> GetCollections()
+        public IEnumerable<CardCollection> GetCollections()
         {
-            return _dataStore.Keys.Where(k => k.EndsWith(".memcards")).Select(k => Path.GetFileNameWithoutExtension(k));
+            var collectionFiles = ListFiles(_baseFolder, "memcards");
+            if (!collectionFiles.Any())
+            {
+                yield return new CardCollection
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "default",
+                    Description = "Default collection"
+                };
+            }
+            else
+            {
+                foreach (var file in collectionFiles)
+                {
+                    yield return GetCollection(file);
+                }
+            }
         }
 
-        public CardCollection GetCollection(string name)
+        public CardCollection GetCollection(string fullPath)
         {
-            string collectionJson = ReadFile(h)
-            if (_dataStore.ContainsKey(name + ".memcards"))
+            string collectionJson = ReadFile(fullPath);
+            if (collectionJson != null)
             {
-                return JsonConvert.DeserializeObject<CardCollection>(_dataStore[name + ".memcards"]);
+                return JsonConvert.DeserializeObject<CardCollection>(collectionJson);
             }
             return null;
         }
 
         public void SaveCollection(CardCollection collection)
         {
-            _dataStore[collection.Name + ".memcards"] = JsonConvert.SerializeObject(collection);
+            var collectionJson = JsonConvert.SerializeObject(collection);
+            WriteFile(Path.Combine(_baseFolder, collection.FileName), collectionJson);
         }
 
         public virtual string ReadFile(string fullPath)
@@ -88,20 +63,31 @@ namespace FlashCards.Core
             }
             return null;
         }
+        public void RemoveCollection(CardCollection collection)
+        {
+            if (collection != null)
+            {
+                DeleteFile(Path.Combine(_baseFolder, collection.FileName));
+            }
+
+        }
 
         public virtual void WriteFile(string fullPath, string body)
         {
             File.WriteAllText(fullPath, body);
         }
 
+        public virtual void DeleteFile(string fullPath)
+        {
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+        }
+
         public virtual IEnumerable<string> ListFiles(string parentPath, string extension)
         {
             return Directory.EnumerateFiles(parentPath, $"*.{extension}", SearchOption.TopDirectoryOnly);
-        }
-
-        public string GetFileName(CardCollection collection)
-        {
-            return GetFileName(collection.Id);
         }
 
         public string GetFileName(Guid collectionId)

@@ -30,6 +30,14 @@ namespace FlashCards.Core
         public override IEnumerable<string> ListFiles(string parentPath, string extension)
         {
             return _dataStore.Keys.Where(k => k.EndsWith(extension)).Select(k => Path.GetFileNameWithoutExtension(k));
-        }        
+        }
+
+        public override void DeleteFile(string fullPath)
+        {
+            if (_dataStore.ContainsKey(fullPath))
+            {
+                _dataStore.Remove(fullPath);
+            }
+        }
     }
 }

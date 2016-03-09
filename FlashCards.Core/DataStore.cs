@@ -19,7 +19,6 @@ namespace FlashCards.Core
             {
                 Name = "foo",
                 Description = "my description",
-                Format = CardFormat.Mixed
             };
             collection.Cards.Add(new Card
             {
@@ -45,7 +44,6 @@ namespace FlashCards.Core
             {
                 Name = "bar",
                 Description = "my description",
-                Format = CardFormat.Text
             };
             collection.Cards.Add(new Card
             {
@@ -69,6 +67,7 @@ namespace FlashCards.Core
 
         public CardCollection GetCollection(string name)
         {
+            string collectionJson = ReadFile(h)
             if (_dataStore.ContainsKey(name + ".memcards"))
             {
                 return JsonConvert.DeserializeObject<CardCollection>(_dataStore[name + ".memcards"]);
@@ -79,6 +78,35 @@ namespace FlashCards.Core
         public void SaveCollection(CardCollection collection)
         {
             _dataStore[collection.Name + ".memcards"] = JsonConvert.SerializeObject(collection);
+        }
+
+        public virtual string ReadFile(string fullPath)
+        {
+            if (File.Exists(fullPath))
+            {
+                return File.ReadAllText(fullPath);
+            }
+            return null;
+        }
+
+        public virtual void WriteFile(string fullPath, string body)
+        {
+            File.WriteAllText(fullPath, body);
+        }
+
+        public virtual IEnumerable<string> ListFiles(string parentPath, string extension)
+        {
+            return Directory.EnumerateFiles(parentPath, $"*.{extension}", SearchOption.TopDirectoryOnly);
+        }
+
+        public string GetFileName(CardCollection collection)
+        {
+            return GetFileName(collection.Id);
+        }
+
+        public string GetFileName(Guid collectionId)
+        {
+            return $"{collectionId}.memcards";
         }
     }
 }

@@ -13,11 +13,11 @@ namespace FlashCards.Core.Model
             Cards = new List<Card>();
         }
 
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
-
-        public CardFormat Format { get; set; }
 
         public List<Card> Cards { get; private set; }
     }

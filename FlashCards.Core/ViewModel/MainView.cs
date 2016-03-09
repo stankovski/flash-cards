@@ -9,23 +9,24 @@ namespace FlashCards.Core.ViewModel
 {
     public class MainView
     {
-        public MainView()
-        {
-            Collections = new ObservableCollection<CollectionView>();
-        }
-
-        public ObservableCollection<CollectionView> Collections { get; private set; }
-
-        public void Load(IDataStore dataStore)
+        private IDataStore _dataStore;
+        public MainView(IDataStore dataStore)
         {
             if (dataStore == null)
             {
                 throw new ArgumentNullException(nameof(dataStore));
             }
+            Collections = new ObservableCollection<CollectionView>();
+            _dataStore = dataStore;
+        }
 
-            foreach (var name in dataStore.GetCollections())
+        public ObservableCollection<CollectionView> Collections { get; private set; }
+
+        public void Load()
+        {
+            foreach (var name in _dataStore.GetCollections())
             {
-                Collections.Add(new CollectionView
+                Collections.Add(new CollectionView(_dataStore)
                 {
                     Name = name
                 });

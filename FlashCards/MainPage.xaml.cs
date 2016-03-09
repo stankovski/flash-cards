@@ -32,7 +32,7 @@ namespace FlashCards
 
         public MainPage()
         {
-            this.ViewModel = new MainView();
+            this.ViewModel = new MainView(App.DataStore);
             this.NavigationLinks = new ObservableCollection<NavigationLink>();
             this.InitializeComponent();
         }
@@ -40,7 +40,7 @@ namespace FlashCards
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            ViewModel.Load(App.DataStore);
+            ViewModel.Load();
         }
 
         private void NavLinkItemClick(object sender, ItemClickEventArgs e)
@@ -63,7 +63,7 @@ namespace FlashCards
             var collectionView = args.Item.DataContext as CollectionView;
             if (collectionView != null)
             {
-                collectionView.Load(App.DataStore);
+                collectionView.Load();
             }
         }
 

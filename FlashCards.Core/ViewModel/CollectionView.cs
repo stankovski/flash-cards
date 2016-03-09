@@ -13,9 +13,17 @@ namespace FlashCards.Core.ViewModel
 {
     public class CollectionView : INotifyPropertyChanged
     {
-        public CollectionView()
+        private IDataStore _dataStore;
+
+        public CollectionView(IDataStore dataStore)
         {
+            if (dataStore == null)
+            {
+                throw new ArgumentNullException(nameof(dataStore));
+            }
+
             Cards = new ObservableCollection<CardView>();
+            _dataStore = dataStore;
         }
 
         public ObservableCollection<CardView> Cards { get; private set; }
@@ -52,19 +60,29 @@ namespace FlashCards.Core.ViewModel
             }
         }
 
-        private string format;
-        public string Format
+        private bool editMode;
+        public bool EditMode
         {
-            get { return format; }
+            get { return editMode; }
             set
             {
-                if (value == format)
+                if (value == editMode)
                     return;
 
-                format = value;
+                editMode = value;
 
-                OnPropertyChanged(nameof(Format));
+                OnPropertyChanged(nameof(EditMode));
             }
+        }
+
+        public void Edit()
+        {
+            EditMode = true;
+        }
+
+        public void Cancel()
+        {
+            EditMode = false;
         }
 
         public void OnPropertyChanged(string name)
@@ -77,22 +95,16 @@ namespace FlashCards.Core.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void Load(IDataStore dataStore)
+        public void Load()
         {
-            if (dataStore == null)
-            {
-                throw new ArgumentNullException(nameof(dataStore));
-            }
-
             if (this.Name == null)
             {
                 throw new InvalidOperationException("Parameter Name in CollectionView cannot be null.");
             }
 
-            var collection = dataStore.GetCollection(this.Name);
+            var collection = _dataStore.GetCollection(this.Name);
             this.Name = collection.Name;
             this.Description = collection.Description;
-            this.Format = collection.Format.ToString();
             this.CardCollection = collection;
             this.Cards.Clear();
 
@@ -106,6 +118,11 @@ namespace FlashCards.Core.ViewModel
             {
                 IsNew = true
             });
+        }
+
+        public void Save()
+        {
+            EditMode = false;
         }
     }
 }

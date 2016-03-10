@@ -15,7 +15,7 @@ namespace FlashCards.Core
         private string _baseFolder;
         public DataStore()
         {
-            _baseFolder = ApplicationData.Current.LocalFolder.Path;
+            _baseFolder = ApplicationData.Current.RoamingFolder.Path;
         }
 
         public IEnumerable<CardCollection> GetCollections()

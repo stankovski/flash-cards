@@ -90,12 +90,12 @@ namespace FlashCards.Core.ViewModel
             this.SideA.Text = card.SideA.Text;
             if (card.SideA.InkStrokes != null)
             {
-                this.SideA.Strokes = card.SideA.InkStrokes.Select(s => s.ToInkStroke()).ToList();
+                this.SideA.Strokes = card.SideA.InkStrokes;
             }
             this.SideB.Text = card.SideB.Text;
             if (card.SideB.InkStrokes != null)
             {
-                this.SideB.Strokes = card.SideB.InkStrokes.Select(s => s.ToInkStroke()).ToList();
+                this.SideB.Strokes = card.SideA.InkStrokes;
             }
         }
 
@@ -114,12 +114,12 @@ namespace FlashCards.Core.ViewModel
             card.SideA = new CardSide
             {
                 Text = this.SideA.Text,
-                InkStrokes = this.SideA.Strokes.Select(s => new StrokeData(s)).ToList()
+                InkStrokes = this.SideA.Strokes
             };
             card.SideB = new CardSide
             {
                 Text = this.SideB.Text,
-                InkStrokes = this.SideB.Strokes.Select(s => new StrokeData(s)).ToList()
+                InkStrokes = this.SideB.Strokes
             };
             return card;
         }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlashCards.Core.Model;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
@@ -14,7 +15,7 @@ namespace FlashCards.Core.ViewModel
     {
         public CardSideView()
         {
-            Strokes = new List<InkStroke>();
+            Strokes = new List<StrokeData>();
         }
 
         private string text;
@@ -32,8 +33,8 @@ namespace FlashCards.Core.ViewModel
             }
         }
 
-        private List<InkStroke> strokes;
-        public List<InkStroke> Strokes
+        private List<StrokeData> strokes;
+        public List<StrokeData> Strokes
         {
             get { return strokes; }
             set

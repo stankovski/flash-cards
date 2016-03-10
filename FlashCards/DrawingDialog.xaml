@@ -9,13 +9,12 @@
     Title="Drawing"
     PrimaryButtonText="Save"
     SecondaryButtonText="Cancel"
-    Width="400"
     Opened="DialogOpened"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
     <StackPanel>
-        <Border Background="White" Width="350" Height="300">
+        <Border Background="White" Height="300">
             <InkCanvas x:Name="InkCanvasControl" />
         </Border>
         <StackPanel>

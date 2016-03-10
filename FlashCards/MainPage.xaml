@@ -52,6 +52,7 @@
                     </Grid.RowDefinitions>
                     <Grid x:Name="Filler" Height="48" Background="Transparent" VerticalAlignment="Top"
                             Grid.Row="0">
+                        <TextBlock Margin="60 0 0 0" VerticalAlignment="Center" Text="FLASH CARDS" Style="{StaticResource TitleTextBlockStyle}"/>
                     </Grid>
                     <Pivot Grid.Row="1" x:Name="CollectionPivot" ItemsSource="{x:Bind ViewModel.Collections, Mode=OneWay}">
                         <Pivot.HeaderTemplate>
@@ -61,8 +62,13 @@
                         </Pivot.HeaderTemplate>
                         <Pivot.ItemTemplate>
                             <DataTemplate x:DataType="vm:CollectionView">
-                                <StackPanel>
-                                    <Grid Visibility="{x:Bind EditMode, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Visibility="{x:Bind EditMode, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="50"/>
@@ -70,7 +76,7 @@
                                         <TextBlock Text="{x:Bind Description, Mode=OneWay}"/>
                                         <Button Grid.Column="1" Content="Edit" Click="{x:Bind Edit}"/>
                                     </Grid>
-                                    <Grid Visibility="{x:Bind EditMode, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Grid Grid.Row="1" Visibility="{x:Bind EditMode, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
@@ -85,7 +91,7 @@
                                         <Button Grid.Column="1" Grid.Row="1" Content="Save" Click="{x:Bind Save}" Margin="5 0 5 0"/>
                                         <Button Grid.Column="2" Grid.Row="1" Content="Cancel" Click="{x:Bind Cancel}" Margin="0 0 5 0"/>
                                     </Grid>
-                                    <GridView x:Name="CardsGridView" ItemsSource="{x:Bind Cards, Mode=OneWay}" SelectionMode="None" Tapped="CardClicked">
+                                    <GridView Grid.Row="2" x:Name="CardsGridView" ItemsSource="{x:Bind Cards, Mode=OneWay}" SelectionMode="None" Tapped="CardClicked">
                                         <GridView.ItemTemplate>
                                             <DataTemplate x:DataType="vm:CardView">
                                                 <Grid>
@@ -93,10 +99,8 @@
                                                     <Viewbox Width="350" Height="200" Stretch="Fill" StretchDirection="Both" VerticalAlignment="Top" HorizontalAlignment="Left"
                                                          Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew, ConverterParameter=Inverse, Mode=OneWay}">
                                                         <StackPanel Orientation="Horizontal">
-                                                            <ui:CardSideView Grid.Column="0" Text="{x:Bind SideA.Text, Mode=OneWay}"
-                                                            Strokes="{x:Bind SideA.Strokes, Mode=OneWay}"/>
-                                                            <ui:CardSideView Grid.Column="0" Text="{x:Bind SideB.Text, Mode=OneWay}"
-                                                            Strokes="{x:Bind SideB.Strokes, Mode=OneWay}"/>
+                                                            <ui:CardSideControl Grid.Column="0" CardSide="{x:Bind SideA, Mode=OneWay}"/>
+                                                            <ui:CardSideControl Grid.Column="0" CardSide="{x:Bind SideB, Mode=OneWay}"/>
                                                         </StackPanel>
                                                     </Viewbox>
                                                     <Grid VerticalAlignment="Top" Width="350" Height="200" HorizontalAlignment="Left" Background="#FFA2CFE0"
@@ -107,7 +111,7 @@
                                             </DataTemplate>
                                         </GridView.ItemTemplate>
                                     </GridView>
-                                </StackPanel>
+                                </Grid>
                             </DataTemplate>
                         </Pivot.ItemTemplate>
                     </Pivot>

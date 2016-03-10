@@ -52,6 +52,7 @@
                     </Grid.RowDefinitions>
                     <Grid x:Name="Filler" Height="48" Background="Transparent" VerticalAlignment="Top"
                             Grid.Row="0">
+                        <TextBlock Margin="60 0 0 0" VerticalAlignment="Center" Text="FLASH CARDS" Style="{StaticResource TitleTextBlockStyle}"/>
                     </Grid>
                     <FlipView Grid.Row="1" ItemsSource="{x:Bind ViewModel.Cards}" Background="White">
                         <FlipView.ItemTemplate>
@@ -60,15 +61,13 @@
                                     <Grid Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse, Path=Flipped, Mode=OneWay}">
                                         <Viewbox Tapped="{x:Bind Flip}" Stretch="Uniform" StretchDirection="Both" VerticalAlignment="Center" HorizontalAlignment="Center"
                                                          Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew, ConverterParameter=Inverse, Mode=OneWay}">
-                                            <ui:CardSideView Grid.Column="0" Text="{x:Bind SideA.Text, Mode=OneWay}"
-                                                        Strokes="{x:Bind SideA.Strokes, Mode=OneWay}"/>
+                                            <ui:CardSideControl Grid.Column="0" CardSide="{x:Bind SideA, Mode=OneWay}"/>
                                         </Viewbox>
                                     </Grid>
                                     <Grid Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=Flipped, Mode=OneWay}">
                                         <Viewbox Tapped="{x:Bind Flip}" Stretch="Uniform" StretchDirection="Both" VerticalAlignment="Center" HorizontalAlignment="Center"
                                                          Visibility="{x:Bind Converter={StaticResource BooleanToVisibilityConverter}, Path=IsNew, ConverterParameter=Inverse, Mode=OneWay}">
-                                            <ui:CardSideView Grid.Column="0" Text="{x:Bind SideB.Text, Mode=OneWay}"
-                                                            Strokes="{x:Bind SideB.Strokes, Mode=OneWay}"/>
+                                            <ui:CardSideControl Grid.Column="0" CardSide="{x:Bind SideB, Mode=OneWay}"/>
                                         </Viewbox>
                                     </Grid>
                                 </Grid>

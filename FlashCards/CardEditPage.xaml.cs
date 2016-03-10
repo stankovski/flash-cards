@@ -47,6 +47,7 @@ namespace FlashCards
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            BuildLocalizedMenu();
             if (e.Parameter != null)
             {
                 CardNavigationModel parameter = e.Parameter as CardNavigationModel;
@@ -87,8 +88,8 @@ namespace FlashCards
                 // Update ViewModel
                 ViewModel.SideA.Text = this.SideAText.Text;
                 ViewModel.SideB.Text = this.SideBText.Text;
-                ViewModel.SideA.Strokes = this.SideAImage.InkPresenter.StrokeContainer.GetStrokes().Select(s => s.Clone()).ToList();
-                ViewModel.SideB.Strokes = this.SideBImage.InkPresenter.StrokeContainer.GetStrokes().Select(s => s.Clone()).ToList();
+                ViewModel.SideA.Strokes = this.SideAImage.InkPresenter.StrokeContainer.GetStrokes().Select(s => new StrokeData(s)).ToList();
+                ViewModel.SideB.Strokes = this.SideBImage.InkPresenter.StrokeContainer.GetStrokes().Select(s => new StrokeData(s)).ToList();
 
                 var card = ViewModel.GetCard();
                 var existingCard = _cardCollection.Cards.FirstOrDefault(c => c.Id == card.Id);
@@ -105,9 +106,23 @@ namespace FlashCards
             }
         }
 
+        private void BuildLocalizedMenu()
+        {
+            NavigationLinks.Add(new NavigationLink
+            {
+                Label = "Home",
+                Symbol = Symbol.Home,
+                Action = () => { Navigation.Service.Navigate<MainPage>(); }
+            });
+        }
+
         private void NavLinkItemClick(object sender, ItemClickEventArgs e)
         {
-
+            var navLink = e.ClickedItem as NavigationLink;
+            if (navLink != null)
+            {
+                navLink.Action();
+            }
         }
 
         private void GoToSettings(object sender, TappedRoutedEventArgs e)
@@ -173,13 +188,18 @@ namespace FlashCards
             }
         }
 
-        private static void UpdateDrawing(InkCanvas canvas, List<InkStroke> strokes)
+        private static void UpdateDrawing(InkCanvas canvas, IEnumerable<InkStroke> strokes)
         {
             canvas.InkPresenter.StrokeContainer.Clear();
             canvas.InkPresenter.StrokeContainer.AddStrokes(strokes);
             canvas.Width = canvas.InkPresenter.StrokeContainer.BoundingRect.Right;
             canvas.Height = canvas.InkPresenter.StrokeContainer.BoundingRect.Bottom;
             canvas.InkPresenter.IsInputEnabled = false;
+        }
+
+        private static void UpdateDrawing(InkCanvas canvas, IEnumerable<StrokeData> strokes)
+        {
+            UpdateDrawing(canvas, strokes.Select(d => d.ToInkStroke()));
         }
     }
 }

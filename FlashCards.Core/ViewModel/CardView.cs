@@ -95,7 +95,7 @@ namespace FlashCards.Core.ViewModel
             this.SideB.Text = card.SideB.Text;
             if (card.SideB.InkStrokes != null)
             {
-                this.SideB.Strokes = card.SideA.InkStrokes;
+                this.SideB.Strokes = card.SideB.InkStrokes;
             }
         }
 

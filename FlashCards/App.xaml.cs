@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using FlashCards.Core;
 using FlashCards.Helpers;
+using Microsoft.Azure.Engagement;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -56,6 +57,8 @@ namespace FlashCards
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            InitEngagement(e);
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -90,6 +93,16 @@ namespace FlashCards
             }
             // Ensure the current window is active
             Window.Current.Activate();
+        }
+
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            InitEngagement(args);
+        }
+
+        private void InitEngagement(IActivatedEventArgs e)
+        {
+            EngagementAgent.Instance.Init(e);
         }
 
         /// <summary>

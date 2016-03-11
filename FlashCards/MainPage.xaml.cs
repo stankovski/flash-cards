@@ -8,6 +8,7 @@ using FlashCards.Core;
 using FlashCards.Core.Model;
 using FlashCards.Core.ViewModel;
 using FlashCards.NavigationModels;
+using Microsoft.Azure.Engagement;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -42,6 +43,7 @@ namespace FlashCards
             base.OnNavigatedTo(e);
             ViewModel.Load();
             BuildLocalizedMenu();
+            EngagementAgent.Instance.StartActivity("MainPage");
         }
 
         private void BuildLocalizedMenu()

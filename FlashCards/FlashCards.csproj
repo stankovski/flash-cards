@@ -101,9 +101,6 @@
     <Compile Include="CardEditPage.xaml.cs">
       <DependentUpon>CardEditPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ContentDialog1.xaml.cs">
-      <DependentUpon>ContentDialog1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\InverseVisibilityConverter.cs" />
     <Compile Include="Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -119,6 +116,14 @@
     <Compile Include="NavigationModels\MemorizationNavigationModel.cs" />
     <Compile Include="NavigationModels\CardNavigationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\overlay\EngagementBaseOverlay.cs" />
+    <Compile Include="Resources\overlay\EngagementOverlayAnnouncement.xaml.cs">
+      <DependentUpon>EngagementOverlayAnnouncement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\overlay\EngagementOverlayNotification.xaml.cs">
+      <DependentUpon>EngagementOverlayNotification.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\overlay\EngagementPageOverlay.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +142,13 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Resources\EngagementConfiguration.xml" />
+    <Content Include="Resources\html\EngagementAnnouncement.html" />
+    <Content Include="Resources\html\EngagementNotification.html" />
+    <Content Include="Resources\images\EngagementIconClose.png" />
+    <Content Include="Resources\images\EngagementIconNOk.png" />
+    <Content Include="Resources\images\EngagementIconNotification.png" />
+    <Content Include="Resources\images\EngagementIconOk.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -151,10 +163,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ContentDialog1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="DrawingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -166,6 +174,14 @@
     <Page Include="MemorizationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\overlay\EngagementOverlayAnnouncement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\overlay\EngagementOverlayNotification.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

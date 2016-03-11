@@ -9,6 +9,7 @@ using FlashCards.Core;
 using FlashCards.Core.Model;
 using FlashCards.Core.ViewModel;
 using FlashCards.NavigationModels;
+using Microsoft.Azure.Engagement;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Input.Inking;
@@ -46,6 +47,8 @@ namespace FlashCards
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            EngagementAgent.Instance.StartActivity("CardEditPage");
+
             base.OnNavigatedTo(e);
             BuildLocalizedMenu();
             if (e.Parameter != null)

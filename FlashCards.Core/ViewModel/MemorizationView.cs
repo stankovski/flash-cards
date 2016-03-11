@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FlashCards.Core.Model;
+using Microsoft.Azure.Engagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -30,6 +31,29 @@ namespace FlashCards.Core.ViewModel
                 cards = value;
 
                 OnPropertyChanged(nameof(Cards));
+            }
+        }
+
+        private int currentCardIndex;
+        public int CurrentCardIndex
+        {
+            get { return currentCardIndex; }
+            set
+            {
+                if (value == currentCardIndex)
+                    return;
+
+                if (value >= 0 && value < Cards.Count)
+                {
+                    Dictionary<object, object> details = new Dictionary<object, object>();
+                    details["SideA"] = Cards[value].SideA.Text;
+                    details["SideB"] = Cards[value].SideB.Text;
+                    EngagementAgent.Instance.SendEvent("FlipPage", details);
+                }
+
+                currentCardIndex = value;
+
+                OnPropertyChanged(nameof(CurrentCardIndex));
             }
         }
 

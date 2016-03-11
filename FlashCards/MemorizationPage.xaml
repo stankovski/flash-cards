@@ -54,7 +54,7 @@
                             Grid.Row="0">
                         <TextBlock Margin="60 0 0 0" VerticalAlignment="Center" Text="FLASH CARDS" Style="{StaticResource TitleTextBlockStyle}"/>
                     </Grid>
-                    <FlipView Grid.Row="1" ItemsSource="{x:Bind ViewModel.Cards}" Background="White">
+                    <FlipView Grid.Row="1" ItemsSource="{x:Bind ViewModel.Cards}" SelectedIndex="{x:Bind ViewModel.CurrentCardIndex, Mode=TwoWay}" Background="White">
                         <FlipView.ItemTemplate>
                             <DataTemplate x:DataType="vm:CardView">
                                 <Grid>

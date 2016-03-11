@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright (c) Microsoft Corporation. All rights reserved.
+-->
+<engagement>
+  <agent>
+    <!-- Your application connection string. -->
+    <connectionString>Endpoint=flash-cards-collection.device.mobileengagement.windows.net;SdkKey=857e118ed24a309bc6cafa7f8f428e48;AppId=cuf000050</connectionString>
+
+    <!-- [Optional] Indicate whether the agent have to report crash or not. -->
+    <reportCrash>true</reportCrash>
+  </agent>
+  <reach>
+    <!-- [Optional] Indicate whether the native push (WNS) is activated or not. -->
+    <enableNativePush>true</enableNativePush>
+  </reach>
+</engagement>

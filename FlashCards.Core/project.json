@@ -1,6 +1,7 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+    "MicrosoftAzure.MobileEngagement": "3.3.1",
     "Newtonsoft.Json": "8.0.2"
   },
   "frameworks": {

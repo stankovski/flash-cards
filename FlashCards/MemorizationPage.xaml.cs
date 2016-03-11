@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using FlashCards.Core;
 using FlashCards.Core.ViewModel;
 using FlashCards.NavigationModels;
+using Microsoft.Azure.Engagement;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -38,6 +39,8 @@ namespace FlashCards
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            EngagementAgent.Instance.StartActivity("MemorizationPage");
+
             base.OnNavigatedTo(e);
             var collection = e.Parameter as MemorizationNavigationModel;
             if (collection == null)
